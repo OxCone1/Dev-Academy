@@ -1,0 +1,14 @@
+{
+  "name": "testing",
+  "version": "1.0.0",
+  "description": "Testing for Node.js server and React frontend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "OxCone",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^20.3.0"
+  }
+}
