@@ -19,6 +19,13 @@ async function startUpInit(argument) {
         // Perform necessary operations
         await findAndPopulateCollections();
         await removeDuplicates();
+        await validateDatabase().then((result) => {
+            if (result === true) {
+                console.log(`Database is valid`);
+            } else {
+                throw new Error(`Database is not valid. An error occurred during the startup process.`);
+            }
+        });
         startUpStatus.startUp = false;
         const fs = require("fs");
         fs.writeFile("./serverMemoryData.json", JSON.stringify(startUpStatus), (err) => {
@@ -63,6 +70,13 @@ async function startUpInit(argument) {
                 await restoreDatabase();
                 await findAndPopulateCollections();
                 await removeDuplicates();
+                await validateDatabase().then((result) => {
+                    if (result === true) {
+                        console.log(`Database is valid`);
+                    } else {
+                        throw new Error(`Database is not valid. An error occurred during restoring process`);
+                    }
+                });
                 process.exit();
             case "-kill":
                 // Handle the -kill parameter
@@ -82,6 +96,7 @@ async function startUpInit(argument) {
                     }
                 });
                 await restoreDatabase();
+                console.log("Killed");
                 killSpinner.stop();
                 process.exit();
             default:

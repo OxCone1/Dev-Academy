@@ -1,5 +1,6 @@
 const { dB } = require("../middleware/connectToDB");
 const { importStations, importJourney } = require("./importFunctionality");
+const bcrypt = require("bcryptjs");
 
 async function findAndPopulateCollections() {
     const db = await dB();
@@ -9,6 +10,20 @@ async function findAndPopulateCollections() {
     if (!collections.some((collection) => collection.name === "stations")) {
         await db.createCollection("stations"); 
         await importStations("../server/csvData/stations.csv", db); // Import stations from the CSV file
+    }
+    
+    //Check if the collection "Users" exists in the database and create it if there is none, also inserting default admin user
+    if (!collections.some((collection) => collection.name === "users")) {
+        await db.createCollection("users");
+        const users = db.collection("users");
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash("admin", salt);
+        const adminUser = {
+            username: "admin",
+            password: hashedPassword,
+        };
+        await users.insertOne(adminUser);
+        console.log("Users collection created and admin user inserted");
     }
 
     // Find missing journey collections

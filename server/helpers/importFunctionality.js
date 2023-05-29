@@ -7,16 +7,15 @@ async function importStations(file, db) {
         fs.createReadStream(file)
             .pipe(csv.parse({ headers: true }))
             .on("data", (row) => {
-                if (row.Kaupunki !== "Espoo") {
                     const filteredRow = {
-                        ID: row.ID,
+                        ID: parseFloat(row.ID),
                         Nimi: row.Nimi,
                         Osoite: row.Osoite,
                         longitude: parseFloat(row.x),
                         latitude: parseFloat(row.y),
+                        capacity: parseFloat(row.Kapasiteet)
                     };
                     filteredData.push(filteredRow);
-                }
             })
             .on("end", async () => {
                 await db.collection("stations").insertMany(filteredData);
