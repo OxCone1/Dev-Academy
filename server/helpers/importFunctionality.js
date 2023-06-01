@@ -45,16 +45,20 @@ async function importJourney(file, db, collectionName) {
                     data["Duration (sec.)"] < 10 ||
                     data["Covered distance (m)"] < 10 ||
                     isNaN(data["Duration (sec.)"]) ||
-                    isNaN(data["Covered distance (m)"])
+                    isNaN(data["Covered distance (m)"]) ||
+                    (data["Departure"] && new Date(data["Departure"]) < new Date("2021-01-01"))
+                    
                 ) {
                     return;
                 }
 
                 const document = {
-                    departure: new Date(data.Departure + "+0000"),
-                    return: new Date(data.Return + "+0000"),
+                    departure: new Date(data.Departure),
+                    returnDate: new Date(data.Return),
                     departure_station_id: parseFloat(data["Departure station id"]),
+                    departure_station_name: data["Departure station name"],
                     return_station_id: parseFloat(data["Return station id"]),
+                    return_station_name: data["Return station name"],
                     coveredDistance: parseFloat(data["Covered distance (m)"]),
                     duration: parseFloat(data["Duration (sec.)"]),
                 };

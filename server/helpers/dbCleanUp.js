@@ -36,6 +36,10 @@ async function checkAndRemoveDuplicates(db, collectionName) {
             await collection.deleteMany({ _id: { $in: idsToRemove } });
         }
     }
+    const date = new Date("2021-01-01T00:00:00.000Z");
+    const dateFilter = { departure: { $lt: date } };
+    await collection.deleteMany(dateFilter);
+    
 }
 
 

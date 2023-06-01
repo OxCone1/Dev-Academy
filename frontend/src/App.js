@@ -1,8 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import '@coreui/coreui/dist/css/coreui.min.css'
+import 'rsuite/dist/rsuite.min.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserAuthContext } from "./Context";
 import { useState, useEffect } from 'react';
 import { fetchURL } from './fetchURL';
+import './App.css';
 import axios from 'axios';
 import NavigationBar from './components/NavigationBar';
 import Footer from './components/Footer';
@@ -58,22 +61,17 @@ function App() {
           }
         });
     }
-  }, []);
-
+  });
 
   return (
     <BrowserRouter>
       <UserAuthContext.Provider value={userAuthData}>
         <NavigationBar />
-        <div className="container">
+        <div className="containerObject">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/journeys" element={<Journeys />} />
             <Route path="/stations" element={<Stations />} />
-            {/* 
-            
-            <Route path="/login" component={Login} />  */}
-           
           </Routes>
         </div>
         <Footer />

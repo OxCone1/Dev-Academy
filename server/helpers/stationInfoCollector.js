@@ -1,9 +1,17 @@
 const { dB } = require("../middleware/connectToDB"); // Importing the dB function from the connectToDB module
 
-async function findJourneyCollections() {
+async function findJourneyCollections(sort) {
     const db = await dB();
     const collectionNames = await db.listCollections().toArray();
     const journeyCollections = collectionNames.filter(collection => collection.name.startsWith("journey"));
+
+    // Sort the journeyCollections based on a specific order
+    journeyCollections.sort((a, b) => {
+        if (sort === -1) {
+            return b.name.localeCompare(a.name);
+        } 
+        return a.name.localeCompare(b.name);
+    });
 
     return journeyCollections.map(collection => collection.name);
 }
@@ -74,7 +82,7 @@ async function findTopReturnStations(stationID, journeyCollections, limit) {
     }
 
     return Object.values(topStations).sort((a, b) => b.count - a.count).slice(0, limit);
-    
+
 }
 
 async function findTopDepartureStations(stationID, journeyCollections, limit) {

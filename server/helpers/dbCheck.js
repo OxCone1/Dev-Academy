@@ -70,8 +70,8 @@ async function validateJourney(collectionName) {
 
     // Checking if the journey object has the expected properties and data types, and if the timestamps are valid
     if (journeyObject) {
-        if (typeof journeyObject.departure_station_id === "number" && typeof journeyObject.return_station_id === "number" && typeof journeyObject.coveredDistance === "number" && typeof journeyObject.duration === "number") {
-            if (Date.parse(journeyObject.departure) && Date.parse(journeyObject.return)) {
+        if (typeof journeyObject.departure_station_id === "number" && typeof journeyObject.departure_station_name === "string" && typeof journeyObject.return_station_name === "string" && typeof journeyObject.return_station_id === "number" && typeof journeyObject.coveredDistance === "number" && typeof journeyObject.duration === "number") {
+            if (Date.parse(journeyObject.departure) && Date.parse(journeyObject.returnDate)) {
                 return true;
             } else {
                 return false;
