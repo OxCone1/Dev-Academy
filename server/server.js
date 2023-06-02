@@ -16,7 +16,7 @@ app.use(cors());
 app.use('/map', require("./routes/data"));
 app.use('/user', require('./routes/profile'))
 app.get("/*", (req, res) => {
-  res.status(404).json({ message: "404" });
+  res.status(200);
 });
 
 const startServer = async () => {
