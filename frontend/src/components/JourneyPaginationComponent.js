@@ -25,7 +25,6 @@ export default function JourneyPaginationComponent({ onClick }) {
     const fetchJourneys = () => {
         setIsLoading(true);
 
-        // Make a request to the server to fetch Journeys for the current page
         axios
             .post(`${fetchURL}/map/journeys`,
                 {
@@ -58,6 +57,7 @@ export default function JourneyPaginationComponent({ onClick }) {
         generatePageNumbers();
     }, [currentPage, totalPages]);
 
+    // Generate page numbers for pagination
     const generatePageNumbers = () => {
         const maxVisiblePages = 3;
         const pageRange = Math.floor((maxVisiblePages - 3) / 2);
@@ -128,11 +128,11 @@ export default function JourneyPaginationComponent({ onClick }) {
       }
 
     function convertToTime(seconds) {
-        const hours = Math.floor(seconds / 3600); // Get the whole number of hours
-        const remainingSeconds = seconds % 3600; // Get the remaining seconds
+        const hours = Math.floor(seconds / 3600);
+        const remainingSeconds = seconds % 3600;
 
-        const minutes = Math.floor(remainingSeconds / 60); // Get the whole number of minutes
-        const remainingSecondsInSeconds = remainingSeconds % 60; // Get the remaining seconds
+        const minutes = Math.floor(remainingSeconds / 60);
+        const remainingSecondsInSeconds = remainingSeconds % 60;
 
         let formattedTime = '';
 

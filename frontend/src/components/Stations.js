@@ -8,8 +8,6 @@ import { fetchURL } from '../fetchURL';
 import stationIcon from '../assets/stationicon.png';
 import StationPaginationComponent from './StationPaginationComponent';
 
-
-
 function convertToKm(metres) {
     return (metres / 1000).toFixed(2);
 }
@@ -71,14 +69,6 @@ export default function Stations() {
             });
     };
 
-    // const handlePopupClose = (station) => {
-    //     // Reset the selected station and zoom when the popup is closed
-    //     const map = mapRef.current;
-    //     if (map) {
-    //         map.flyTo([station.latitude, station.longitude], previousZoom);
-    //     }
-    // };
-
     return (
         <div className="mapContainer">
             <StationPaginationComponent
@@ -98,9 +88,8 @@ export default function Stations() {
                             icon={customIcon}
                             eventHandlers={{
                                 popupopen: () => handlePopupOpen(station),
-                                // popupclose: () => handlePopupClose(station),
                             }}
-                            ref={(marker) => { markerRefs.current[station.ID] = marker; }} // Store marker instance in the ref
+                            ref={(marker) => { markerRefs.current[station.ID] = marker; }}
                         >
                             <Popup autoClose={false} className="popup-content">
                                 <div className='popup-location'>
@@ -122,7 +111,6 @@ export default function Stations() {
                                             <ScaleLoader className='popup-loader' color="#d0bdf4" height={25} width={3} />
                                         </>
                                     ) : (
-                                        //if there is an error, show error message and don't show the rest of the popup
                                         isError ? (
                                             <div className='popup-error'>
                                                 <div className='popup-error-sign'>

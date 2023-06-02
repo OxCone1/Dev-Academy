@@ -1,3 +1,4 @@
+// Importing data from csv files to MongoDB
 async function importStations(file, db) {
     return new Promise((resolve, reject) => {
         const fs = require("fs");
@@ -20,14 +21,15 @@ async function importStations(file, db) {
             .on("end", async () => {
                 await db.collection("stations").insertMany(filteredData);
                 console.log(`Data import completed for stations`);
-                resolve(); // Resolve the promise when import is finished
+                resolve();
             })
             .on("error", (error) => {
-                reject(error); // Reject the promise if there's an error
+                reject(error);
             });
     });
 }
 
+// Importing journey data from csv files to MongoDB
 async function importJourney(file, db, collectionName) {
     return new Promise((resolve, reject) => {
         const fs = require("fs");
@@ -38,7 +40,7 @@ async function importJourney(file, db, collectionName) {
         fs.createReadStream(file)
             .pipe(csv.parse({ headers: true }))
             .on("error", (error) => {
-                reject(error); // Reject the promise if there's an error
+                reject(error);
             })
             .on("data", (data) => {
                 if (
@@ -69,7 +71,7 @@ async function importJourney(file, db, collectionName) {
                 // Insert documents in batch when the batch size is reached
                 if (batchDocuments.length === batchSize) {
                     insertDocuments(db, collectionName, batchDocuments);
-                    batchDocuments = []; // Clear the batch array
+                    batchDocuments = [];
                 }
             })
             .on('end', function () {
@@ -77,10 +79,10 @@ async function importJourney(file, db, collectionName) {
                     insertDocuments(db, collectionName, batchDocuments)
                         .then(() => {
                             console.log(`Data import completed for ${collectionName}`);
-                            resolve(); // Resolve the promise when import is finished
+                            resolve();
                         })
                         .catch((error) => {
-                            reject(error); // Reject the promise if there's an error
+                            reject(error);
                         });
                 } else {
                     resolve(); // Resolve the promise when import is finished

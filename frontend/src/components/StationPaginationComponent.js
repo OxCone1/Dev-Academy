@@ -52,6 +52,7 @@ export default function StationPaginationComponent({ onClick }) {
         generatePageNumbers();
     }, [currentPage, totalPages]);
 
+    // Generate page numbers for pagination
     const generatePageNumbers = () => {
         const maxVisiblePages = 3;
         const pageRange = Math.floor((maxVisiblePages - 3) / 2);

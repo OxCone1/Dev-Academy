@@ -13,13 +13,9 @@ import Home from './components/Home';
 import Journeys from './components/Journeys';
 import Stations from './components/Stations';
 
-// import Home from './Home';
-// import Journeys from './Journeys';
-// import Stations from './Stations';
-// import Login from './Login';
-
 function App() {
 
+  // User authentication logic
   const jwtFromStorage = window.localStorage.getItem("appAuthData");
   const initialAuthData = {
     jwt: jwtFromStorage,
@@ -39,6 +35,7 @@ function App() {
   const [userAuthData, setUserAuthData] = useState({ ...initialAuthData });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Check if user credentials are valid
   useEffect(() => {
     if (userAuthData.jwt != null || userAuthData.jwt != undefined) {
       const config = {

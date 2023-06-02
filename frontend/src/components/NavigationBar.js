@@ -20,11 +20,13 @@ const NavigationBar = () => {
     function logout() {
         UserAuthContextValue.logout();
     }
+
     const config = {
         headers: {
             Authorization: `Bearer ${UserAuthContextValue.jwt}`,
         },
     };
+
     function handleLogin() {
         const loginData = {
             username: username,
@@ -38,7 +40,6 @@ const NavigationBar = () => {
                 setVisible(false);
             })
             .catch((error) => {
-                // Handle login error
                 console.log('Login failed:', error);
             });
     }

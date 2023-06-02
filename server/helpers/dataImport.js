@@ -3,7 +3,6 @@ const { importStations, importJourney } = require("./importFunctionality");
 const bcrypt = require("bcryptjs");
 const fs = require('fs');
 const path = require('path');
-const dataDirectory = '../server/csvData';
 
 async function findAndPopulateCollections() {
     const db = await dB();

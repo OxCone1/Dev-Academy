@@ -5,7 +5,7 @@ const { dB } = require('../middleware/connectToDB');
 const { findJourneyCollections, calculateAverageDistanceFrom, calculateAverageDistanceTo, findTopReturnStations, findTopDepartureStations } = require('../helpers/stationInfoCollector');
 const { ObjectId } = require('mongodb');
 
-//use no auth for this file
+// Get all stations, stations for pagination and stations for search
 router.get('/stations', async (req, res) => {
     const db = await dB();
     const stationCollection = db.collection("stations");
@@ -58,6 +58,7 @@ router.get('/stations', async (req, res) => {
     }
 });
 
+// Get station by ID, and display statistical information about the station
 router.post('/getStation', async (req, res) => {
     const db = await dB();
     const stationCollection = db.collection("stations");
@@ -90,6 +91,7 @@ router.post('/getStation', async (req, res) => {
     }
 });
 
+// Get all journeys or journeys for pagination
 router.post('/journeys', async (req, res) => {
     try {
         const db = await dB();
@@ -120,6 +122,7 @@ router.post('/journeys', async (req, res) => {
         let totalJourneys = 0;
         let paginatedJourneys = [];
 
+        //Filter, sort and paginate journeys from each collection
         for (const collection of journeyCollections) {
             const countPipeline = [...aggregationPipeline, { $count: "totalJourneys" }];
             const [journeyCount] = await db.collection(collection).aggregate(countPipeline).toArray();
@@ -136,12 +139,12 @@ router.post('/journeys', async (req, res) => {
                 if (collectionStartIndex < collectionEndIndex) {
                     const pipeline = [...aggregationPipeline, { $skip: collectionStartIndex }, { $limit: collectionEndIndex - collectionStartIndex }];
                     const journeys = await db.collection(collection).aggregate(pipeline).toArray();
-                    paginatedJourneys = [...paginatedJourneys, ...journeys]; // Append the journeys to the existing paginatedJourneys array
+                    paginatedJourneys = [...paginatedJourneys, ...journeys];
                 }
             } else {
                 const pipeline = [...aggregationPipeline];
                 const journeys = await db.collection(collection).aggregate(pipeline).toArray();
-                paginatedJourneys = [...paginatedJourneys, ...journeys]; // Append the journeys to the existing paginatedJourneys array
+                paginatedJourneys = [...paginatedJourneys, ...journeys];
             }
         }
 
@@ -171,17 +174,16 @@ router.post('/journeys', async (req, res) => {
 });
 
 router.post('/journey', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    //get user _id from jwt
+    // Get user _id from jwt
     const userID = req.user._id;
-    // validate journey object
+    // Validate journey object
     const journey = req.body.journey;
     if (typeof journey.departure === "string" && typeof journey.returnDate === "string" && typeof journey.departure_station_id === "number" && typeof journey.return_station_name === "string" && typeof journey.return_station_id === "number" && typeof journey.departure_station_name === "string" && typeof journey.coveredDistance === "number" && typeof journey.duration === "number") {
 
+        // Check departure date and then check if there is a collection for that year+month (journey-YYYY-MM)
         const db = await dB();
-        // check departure date and then check if there is a collection for that year+month (journey-YYYY-MM)
         const departureDate = new Date(req.body.journey.departure);
         const returnDate = new Date(req.body.journey.returnDate);
-        // add 0 to month if it is less than 10 (do it with ``)
         const collectionName = `journey-${departureDate.getFullYear()}-${departureDate.getMonth() < 10 ? `0${departureDate.getMonth() + 1}` : departureDate.getMonth()}`;
         const journeyCollection = db.collection(collectionName);
 
@@ -202,6 +204,7 @@ router.post('/journey', passport.authenticate('jwt', { session: false }), async 
             let journeyExists = false;
 
             for (const collection of journeyCollections) {
+                // Check if exactly this journey already exists
                 const existingJourney = await db.collection(collection).findOne({
                     duration: journeyData.duration,
                     coveredDistance: journeyData.coveredDistance,
@@ -250,7 +253,7 @@ router.post('/station', passport.authenticate('jwt', { session: false }), async 
 
     // Check if the station object has all required fields
     if (typeof station.Nimi === "string" && typeof station.Osoite === "string" && typeof station.latitude === "number" && typeof station.longitude === "number" && typeof station.capacity === "number") {
-        // Find if a station with the same ID already exists
+
         try {
             // Insert the new station document
             await stationCollection.insertOne(station);

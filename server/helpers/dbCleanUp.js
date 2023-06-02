@@ -1,5 +1,6 @@
 const { dB } = require("../middleware/connectToDB");
 
+// Find duplicates
 async function checkAndRemoveDuplicates(db, collectionName) {
     const collection = await db.collection(collectionName);
     const duplicates = await collection.aggregate([
@@ -25,7 +26,8 @@ async function checkAndRemoveDuplicates(db, collectionName) {
     // Remove duplicates
     if (duplicates.length > 0) {
         console.log("Removing duplicates from", collectionName);
-        const batchSize = 8000; // Adjust the batch size as per your requirements
+        // Adjust the batch size as needed
+        const batchSize = 8000;
 
         for (let i = 0; i < duplicates.length; i += batchSize) {
             const batch = duplicates.slice(i, i + batchSize);

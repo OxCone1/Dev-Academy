@@ -29,6 +29,7 @@ export default function Journeys() {
       });
   }, []);
 
+  // Handles journey animation and popup opening
   const handlePopupOpen = (startStationID, endStationId) => {
     const map = mapRef.current;
     if (map) {

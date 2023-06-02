@@ -4,11 +4,13 @@ const passport = require('../middleware/auth');
 const { createToken } = require('../middleware/auth');
 const { dB } = require('../middleware/connectToDB');
 
+// User login
 router.post('/login', passport.authenticate('local', { session: false }), async (req, res) => {
     const token = await createToken(req.user);
     res.status(200).json({ token: token })
 });
 
+// User token verification
 router.post('/verify', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const userCollection = (await dB()).collection("users")
     const user = await userCollection.findOne({ id: req.user.id })

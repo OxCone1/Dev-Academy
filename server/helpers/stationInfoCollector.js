@@ -1,5 +1,6 @@
 const { dB } = require("../middleware/connectToDB"); // Importing the dB function from the connectToDB module
 
+// Function to find all journey collections
 async function findJourneyCollections(sort) {
     const db = await dB();
     const collectionNames = await db.listCollections().toArray();
@@ -16,6 +17,7 @@ async function findJourneyCollections(sort) {
     return journeyCollections.map(collection => collection.name);
 }
 
+// Function to find average distance from a station
 async function calculateAverageDistanceFrom(stationID, journeyCollections) {
     let totalDistance = 0;
     let totalCount = 0;
@@ -37,6 +39,7 @@ async function calculateAverageDistanceFrom(stationID, journeyCollections) {
     return totalCount > 0 ? totalDistance / totalCount : 0;
 }
 
+// Function to find average distance to a station
 async function calculateAverageDistanceTo(stationID, journeyCollections) {
     let totalDistance = 0;
     let totalCount = 0;
@@ -58,6 +61,7 @@ async function calculateAverageDistanceTo(stationID, journeyCollections) {
     return totalCount > 0 ? totalDistance / totalCount : 0;
 }
 
+// Function to find top "n" stations with most journeys to a station, where "n" is the limit
 async function findTopReturnStations(stationID, journeyCollections, limit) {
     const topStations = {};
 
@@ -85,6 +89,7 @@ async function findTopReturnStations(stationID, journeyCollections, limit) {
 
 }
 
+// Function to find top "n" stations with most journeys from a station, where "n" is the limit
 async function findTopDepartureStations(stationID, journeyCollections, limit) {
     const topStations = {};
 

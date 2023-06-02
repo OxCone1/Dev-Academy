@@ -43,6 +43,7 @@ async function validateDatabase() {
         return false;
     }
 }
+
 // Validating the station collections
 async function validateStations(collectionName) {
     const db = await dB();
@@ -61,6 +62,7 @@ async function validateStations(collectionName) {
         return false;
     }
 }
+
 // Validating the journey collections
 async function validateJourney(collectionName) {
     const db = await dB();
@@ -84,6 +86,7 @@ async function validateJourney(collectionName) {
     }
 }
 
+// Validating the users collections
 async function validateUsers(collectionName) {
     const db = await dB();
     const collection = await db.collection(collectionName);
