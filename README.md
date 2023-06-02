@@ -20,7 +20,6 @@ This is the pre-assignment for Solita Dev Academy Finland 2023. The app displays
 - [Node.js](https://nodejs.org/en/)
 - [Express](https://expressjs.com/)
 - [MongoDB](https://www.mongodb.com/)
-- [Axios](https://axios-http.com/)
 - [Passport](http://www.passportjs.org/)
 - [Bcrypt](https://www.npmjs.com/package/bcrypt)
 - [Dotenv](https://www.npmjs.com/package/dotenv)
