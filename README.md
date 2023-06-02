@@ -1,8 +1,37 @@
 # Helsinki City Bike App
 
-🚲 Welcome to the Helsinki City Bike App! 🌇
+## 🚲 Welcome to the Helsinki City Bike App! 🌇
 
 This is the pre-assignment for Solita Dev Academy Finland 2023. The app displays data from journeys made with city bikes in the Helsinki Capital area. You can explore the journeys, stations, and various statistics related to the bike usage.
+## [💻 LIVE FRONTEND DEMO](https://academy-frontend-2023.herokuapp.com/)
+## [💾 LIVE BACKEND DEMO](https://academy-server-2023.herokuapp.com/)
+❕ Plesae note that the apps are hosted on Heroku servers, so it might take some time wake them up. ❕
+
+&nbsp;
+# Tech Stack
+## Frontend
+- [React](https://reactjs.org/)
+- [React Router](https://reactrouter.com/)
+- [Leaflet](https://leafletjs.com/)
+- [CoreUI](https://coreui.io/)
+- [Axios](https://axios-http.com/)
+
+## Backend
+- [Node.js](https://nodejs.org/en/)
+- [Express](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [Axios](https://axios-http.com/)
+- [Passport](http://www.passportjs.org/)
+- [Bcrypt](https://www.npmjs.com/package/bcrypt)
+- [Dotenv](https://www.npmjs.com/package/dotenv)
+- [Cors](https://www.npmjs.com/package/cors)
+- [JSON Web Token](https://www.npmjs.com/package/jsonwebtoken)
+- [Nodemon](https://www.npmjs.com/package/nodemon)
+- [Fast-csv](https://www.npmjs.com/package/fast-csv)
+
+## Database
+- For live example - [MongoDB](https://www.mongodb.com/) hosted on [DigitalOcean](https://www.digitalocean.com/)
+
 
 # Installation
 ## Prerequisites
@@ -48,7 +77,7 @@ This is the pre-assignment for Solita Dev Academy Finland 2023. The app displays
      npm i
      ```
 
-4. Start the MongoDB server:
+4. Start the MongoDB server (only in case if is not running after installation):
 
     ```shell
     mkdir "C:\data\db"
@@ -62,6 +91,7 @@ This is the pre-assignment for Solita Dev Academy Finland 2023. The app displays
     cd server
     node server.js
     ```
+    Do not interrupt first launch procedures and wait until you see "Startup completed" in console.
 
 6. Start the frontend server:
 
@@ -70,9 +100,26 @@ This is the pre-assignment for Solita Dev Academy Finland 2023. The app displays
     cd frontend
     npm start
     ```
+7. Set up .env file in server directory:
 
+    - Create .env file in server directory
+    - Copy and paste this code in .env file:
+    
+      ```shell
+      DATABASE_URL=mongodb://127.0.0.1:27017
+      JWTKEY=inserthereyoursecret
+      ```
+    - Replace "inserthereyoursecret" with your own secret key. You can generate it [here](https://passwordsgenerator.net/).
+    - If you want to use your own MongoDB server, change DATABASE_URL to your server URL.
 
-# Frontend
+&nbsp;
+
+⚠️ If you have encountered any errors, see [Troubleshooting](#troubleshooting) section. ⚠️
+---
+&nbsp;
+
+# 💻Frontend
+## Ideal viewport size is 1920x1080px (1920x961-929) (Full HD)
 
 ## 1. Map (Stations) ([Leaflet library](https://leafletjs.com/))
 
@@ -107,9 +154,10 @@ This is the pre-assignment for Solita Dev Academy Finland 2023. The app displays
 | :---: | :---: | :---: |
 | ![Pic.1](images/login.png) | ![Pic.2](images/dropdown.png) | ![Pic.3](images/journeyInput.png) |
 
-# Backend
+# 💾Backend
 
-## 1. API
+## API
+&nbsp;
 
 Base URL
 --------
@@ -260,6 +308,103 @@ Response:
 
 -   Success: 200 OK (User verified)
 -   Error: 401 Unauthorized or 500 Internal Server Error
+
+&nbsp;
+
+# Troubleshooting
+&nbsp;
+
+## Server Startup Functions
+---
+
+The server contains startup functions that perform necessary operations for data initialization and validation.
+
+### ❗ NOTE: The server will not start if you provide any launch arguments on startup. ❗ 
+
+## Startup Initialization
+
+The startup initialization function is called when the server starts. It performs the following operations:
+
+### 1. Checks serverMemmoryData.json file for existing data on whether server has been initialized before.
+
+- If file's `startUp` property is `true`, the server has not been initialized before and the function will continue to the next step.
+    - It will then connect to the database and check if the database contains any data.
+        - If the database contains data, the function will stop and return.
+        - If the database does not contain data, it will start importing data from csv files.
+    - After importing data from csv files, it will check and remove any duplicate in the database.
+    - Then it will validate the data in the database. If the data is valid, it will set the `startUp` property in serverMemmoryData.json to `false` and return.
+- If file's `startUp` property is `false`, the server has been initialized before and it will start the server with performing only validation operations.
+
+### 2. Special startup arguments
+
+- If you suspect that the data in the database contains duplicates, you can start the server with the `-clean` argument. This will remove all duplicates from the database. After removing duplicates, the server will stop. You can then start the server again without the `-clean` argument. 
+
+    Example usage:
+
+    ```bash
+    node server.js -clean
+    ```
+- If you suspect that data have not been imported from csv files properly, you can start the server with the `-restore` argument. This will remove all data from the database and import data from csv files again. After importing data from csv files, the server will stop. You can then start the server again without the `-restore` argument. 
+
+    Example usage:
+
+    ```bash
+    node server.js -restore
+    ```
+
+- If you want to have a fresh start, you can start the server with the `-kill` argument. This will remove all data from the database and reset the `startUp` property in serverMemmoryData.json to `true`. It will cause the server to perform all startup operation again (described in step 1). After resetting, the server will stop. You can then start the server again without the `-kill` argument. 
+
+    Example usage:
+
+    ```bash
+    node server.js -kill
+    ```
+&nbsp;
+
+## Known Issues
+---
+
+### 1. The server is running out of memory on CSV file import / duplicate removal / `-restore` argument
+Even though multiple memory optimizations have been made, the server may still run out of memory on CSV file import, duplicate removal or `-restore` argument. This is due to the large amount of data being processed.
+- ### Solution: 
+    - Close all other applications that are using a lot of memory (Chrome, Steam, Discord, etc.)
+    - Try restarting your computer and running the server again. This will free up memory.
+
+### 2. In some cases MongoDB server has not started after it has been installed
+- ### Solution:
+    - See step 4 in [Installation steps](#installation-steps).
+    - Try restarting your computer and running the server again. This will start the MongoDB server.
+    - If the MongoDB server still does not start, try reinstalling MongoDB.
+    - If the MongoDB server still does not start, try installing MongoDB server as a service. Instructions can be found [here](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/#run-mongodb-community-edition-from-the-command-interpreter).
+    - If you see an error message with exit code 100, try resolving the issue by following the instructions [here](https://stackoverflow.com/questions/41420466/how-to-resolve-mongodb-failing-to-instantiate).
+
+### 3. MongoDB server is running out of memory on heavy operations
+In versions before 6.0.0, MongoDB server did not have an option to write smaller temporary files to disk (no `cursor.allowDiskUse()` function). This caused MongoDB server to run out of memory on heavy operations. This issue has been fixed in version 6.0.0.
+- ### Solution:
+    - Update MongoDB server to version 6.0.0 or newer.
+
+### 4. Cloning the repository to folders/directories with special permissions required for writing/renaming/deleting files
+If this happens, the server will not be able to change the `startUp` property in serverMemmoryData.json file. This will cause the server to perform fresh startup operations every time it starts (which includes importing data from csv files), thus resulting in a very long startup time.
+- ### Solution:
+    - Clone the repository to a folder/directory with no special permissions.
+
+&nbsp;
+
+# Personal Notes
+
+I'm really proud of completing this project within the 7-day speedrun. It was quite challenging, but I managed to overcome the difficulties and implement all the required features.
+
+During the development process, I faced a few obstacles. One of the major challenges was setting up the MongoDB server and ensuring its proper connection with the backend. At first, I had some issues with the MongoDB server not starting properly. Since then I was starting the server manually every time I wanted to run the app. (required me to put mongod as an environmental variable on my Windows machine). I also had to deal with the fact that Node.js server was running out of memory on heavy operations. I had to optimize the code a lot to reduce the memory usage. At one point, MongoDB and Node.js combined were using over 5.5GB of memory.
+
+Implementing user authentication was another significant task. Although user registration was not required, I decided to create a default user with login credentials. This allowed me to secure the adding of journeys and stations to the database. I used JWT for authentication and integrated it into the backend API endpoints.
+
+The frontend development involved working with React, React Router, and Leaflet libraries. I had to create interactive map components for displaying stations and journeys. It was a great learning experience to work with Leaflet and utilize its functionalities, such as markers and lines, to represent the data visually.
+
+In terms of deployment, I hosted the frontend and backend on Heroku servers. It took some time to set up the deployment configurations correctly and ensure the smooth functioning of the apps on the Heroku platform.
+
+Overall, this project allowed me to enhance my skills in full-stack development and gain experience in working with various technologies and libraries. I am satisfied with the final result and believe that I have successfully met the requirements of the Solita Dev Academy pre-assignment.
+
+&nbsp;
 
 
 # License
