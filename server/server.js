@@ -16,7 +16,7 @@ app.use(cors());
 app.use('/map', require("./routes/data"));
 app.use('/user', require('./routes/profile'))
 app.get("/*", (req, res) => {
-  res.status(200);
+  res.status(200).json({ message: "Running" });
 });
 
 const startServer = async () => {
