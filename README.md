@@ -112,6 +112,9 @@ This is the pre-assignment for Solita Dev Academy Finland 2023. The app displays
     - Replace "inserthereyoursecret" with your own secret key. You can generate it [here](https://passwordsgenerator.net/).
     - If you want to use your own MongoDB server, change DATABASE_URL to your server URL.
 
+8. If you want to use live version of the server with fully validated data in database:
+    - Change fetchURL in [frontend/src/fetchURL.js](/frontend/src/fetchURL.js) from "http://127.0.0.1:3002" to "https://academy-server-2023.herokuapp.com".
+
 &nbsp;
 
 ⚠️ If you have encountered any errors, see [Troubleshooting](#troubleshooting) section. ⚠️
