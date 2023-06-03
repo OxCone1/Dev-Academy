@@ -99,7 +99,7 @@ async function apiTester(url) {
                 }
             })
             .catch((error) => {
-                successfulTests.login = { status: error.response.status, passed: false };
+                successfulTests.login = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             })
 
@@ -119,7 +119,7 @@ async function apiTester(url) {
                 successfulTests.verify = { status: response.status, time: verifyTime, passed: true }
             })
             .catch((error) => {
-                successfulTests.verify = { status: error.response.status, passed: false };
+                successfulTests.verify = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             })
 
@@ -133,6 +133,7 @@ async function apiTester(url) {
                 successfulTests.stations = { status: response.status, time: stationsTime, passed: true }
             })
             .catch((error) => {
+                successfulTests.stations = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             })
 
@@ -145,7 +146,7 @@ async function apiTester(url) {
                 successfulTests.stationsQuery = { status: response.status, time: stationsQueryTime, passed: true }
             })
             .catch((error) => {
-                successfulTests.stationsQuery = { status: error.response.status, passed: false };
+                successfulTests.stationsQuery = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             })
 
@@ -158,7 +159,7 @@ async function apiTester(url) {
                 successfulTests.stationsQuerySearch = { status: response.status, time: stationsQuerySearchTime, passed: true };
             })
             .catch((error) => {
-                successfulTests.stationsQuerySearch = { status: error.response.status, passed: false };
+                successfulTests.stationsQuerySearch = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             });
 
@@ -172,7 +173,7 @@ async function apiTester(url) {
                 successfulTests.getStation = { status: response.status, time: getStationTime, passed: true };
             })
             .catch((error) => {
-                successfulTests.getStation = { status: error.response.status, passed: false };
+                successfulTests.getStation = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             });
 
@@ -192,7 +193,7 @@ async function apiTester(url) {
                 successfulTests.journeysQuery = { status: response.status, time: journeysQueryTime, passed: true };
             })
             .catch((error) => {
-                successfulTests.journeysQuery = { status: error.response.status, passed: false };
+                successfulTests.journeysQuery = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             });
 
@@ -216,7 +217,7 @@ async function apiTester(url) {
                 successfulTests.journeys = { status: response.status, time: journeysTime, passed: true };
             })
             .catch((error) => {
-                successfulTests.journeys = { status: error.response.status, passed: false };
+                successfulTests.journeys = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             });
 
@@ -240,7 +241,7 @@ async function apiTester(url) {
                 successfulTests.journey = { status: response.status, time: journeyTime, passed: true };
             })
             .catch((error) => {
-                successfulTests.journey = { status: error.response.status, passed: false };
+                successfulTests.journey = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             });
 
@@ -260,7 +261,7 @@ async function apiTester(url) {
                 successfulTests.station = { status: response.status, time: stationTime, passed: true };
             })
             .catch((error) => {
-                successfulTests.station = { status: error.response.status, passed: false };
+                successfulTests.station = { status: error.response.status, error: error.response.data, passed: false };
                 console.log(error.message)
             });
 

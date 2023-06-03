@@ -14,9 +14,11 @@ async function testWeb(url, expected) {
         testing = "Local"
     } else {
         testing = "Live"
+        //wake up servers
+        await testers.wakeUpServer(url);
+        await testers.wakeUpServer(liveBackend);
     }
-
-
+    //start measuring performance
     let startTime = Date.now();
 
     let browser = await browserObject.startBrowser();
@@ -51,15 +53,15 @@ async function testWeb(url, expected) {
 }
 
 async function testApi(url, expected) {
-    //detect if url is local or live
+    //Detect if url is local or live
     let testing = []
 
     if (url.includes("localhost")) {
         testing = "Local"
     } else {
         testing = "Live"
+        await testers.wakeUpServer(url);
     }
-    await testers.wakeUpServer(url);
     let startTime = Date.now();
 
     let isFirstLine = true;
@@ -120,7 +122,46 @@ async function runAllTests() {
     let endTime = Date.now();
     let totalTime = (endTime - startTime) / 1000;
     let minutes = Math.floor(totalTime / 60);
-    let seconds = totalTime - (minutes * 60).toFixed(2);
+    let seconds = (totalTime - (minutes * 60)).toFixed(2);
     console.log(`Total time: ${minutes} : ${seconds} seconds`);
+    process.exit(1);
 }
-runAllTests();
+
+async function runLiveTests() {
+    let startTime = Date.now();
+    await testWeb(liveFrontend, 30);
+    await testApi(liveBackend, 25)
+    let endTime = Date.now();
+    let totalTime = (endTime - startTime) / 1000;
+    let minutes = Math.floor(totalTime / 60);
+    let seconds = (totalTime - (minutes * 60)).toFixed(2);
+    console.log(`Total time: ${minutes} : ${seconds} seconds`);
+    process.exit(1);
+}
+
+async function runLocalTests() {
+    let startTime = Date.now();
+    await testWeb(localFrontend, 20);
+    await testApi(localBackend, 17);
+    let endTime = Date.now();
+    let totalTime = (endTime - startTime) / 1000;
+    let minutes = Math.floor(totalTime / 60);
+    let seconds = (totalTime - (minutes * 60)).toFixed(2);
+    console.log(`Total time: ${minutes} : ${seconds} seconds`);
+    process.exit(1);
+}
+
+switch (process.argv[2]) {
+    case "-all":
+        runAllTests();
+        break;
+    case "-live":
+        runLiveTests();
+        break;
+    case "-local":
+        runLocalTests();
+        break;
+    default:
+        runAllTests();
+        break;
+}

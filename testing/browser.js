@@ -4,9 +4,8 @@ async function startBrowser(){
 	let browser;
 	try {
 	    browser = await puppeteer.launch({
-			executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
 	        headless: false,
-	        args: ["--disable-setuid-sandbox", "--no-sandbox"],
+	        args: ["--disable-setuid-sandbox"],
 	        'ignoreHTTPSErrors': true
 	    });
 	} catch (err) {
