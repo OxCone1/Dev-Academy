@@ -3,11 +3,10 @@ const puppeteer = require('puppeteer');
 async function startBrowser(){
 	let browser;
 	try {
-	    console.log("Opening the browser......");
 	    browser = await puppeteer.launch({
 			executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
 	        headless: false,
-	        args: ["--disable-setuid-sandbox", "--no-sandbox", "--incognito"],
+	        args: ["--disable-setuid-sandbox", "--no-sandbox"],
 	        'ignoreHTTPSErrors': true
 	    });
 	} catch (err) {
