@@ -4,12 +4,17 @@
   "description": "Testing for Node.js server and React frontend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start-server": "cd ../server && node server.js",
+    "start-react": "cd ../frontend && npm start",
+    "start-test": "cd ../testing && node index.js",
+    "start-auto": "concurrently \"npm run start-server\" \"npm run start-react\" \"npm run start-test\"",
+    "start" : "node index.js"
   },
   "author": "OxCone",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.4.0",
+    "concurrently": "^8.1.0",
     "puppeteer": "^20.3.0"
   }
 }
