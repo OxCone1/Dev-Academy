@@ -7,6 +7,8 @@ This is the pre-assignment for Solita Dev Academy Finland 2023. The app displays
 ## [💾 LIVE BACKEND DEMO](https://academy-server-2023.herokuapp.com/)
 ❕ Plesae note that the apps are hosted on Heroku servers, so it might take some time wake them up. ❕
 
+❕ Testing logic, documentation and tests themselves were completed after the project deadline. If they will not count towards application, please still [check them out](#🔍-testing). ❕
+
 &nbsp;
 # Tech Stack
 ## Frontend
@@ -177,19 +179,19 @@ Stations
 
 ### Retrieve Stations
 
-Retrieves a list of stations.
+Retrieves a list of stations for pagination (+ search) or just list of all stations.
 
-URL: `/stations`
+URL: `/map/stations`
 
 Method: `GET`
 
 Parameters:
 
--   `page` (optional): The page number for pagination. Default is 1.
--   `limit` (optional): The maximum number of stations to retrieve per page. Default is 10.
--   `search` (optional): A search query to filter stations by name or address.
+-   `page` (optional): The page number for pagination. Default is 1. If provided, please also provide the `limit` parameter.
+-   `limit` (optional): The maximum number of stations to retrieve per page. Default is 30. If provided, please also provide the `page` parameter.
+-   `search` (optional): A search query to filter stations by name or address. The search is case-insensitive and matches partial words. If provided, please also provide the `page` and `limit` parameters.
 
-Response:
+Response (pagination):
 
 -   `totalStations`: The total number of stations.
 -   `currentPage`: The current page number.
@@ -198,11 +200,16 @@ Response:
 -   `hasPreviousPage`: Indicates whether there is a previous page.
 -   `stations`: An array of station objects.
 
+Response (list):
+
+-   `stations`: An array of station objects.
+
+
 ### Get Station
 
 Retrieves a specific station by its ID.
 
-URL: `/getStation`
+URL: `/map/getStation`
 
 Method: `POST`
 
@@ -225,19 +232,19 @@ Journeys
 
 Retrieves a list of journeys.
 
-URL: `/journeys`
+URL: `/map/journeys`
 
 Method: `POST`
 
 Request Body:
 
--   `options` (optional): An object containing options for filtering and sorting journeys.
-    -   `page` (optional): The page number for pagination. Default is 1.
-    -   `limit` (optional): The maximum number of journeys to retrieve per page. Default is 10.
+-   `options` (required): An object containing options for filtering and sorting journeys.
+    -   `sort` (required): An object specifying sorting criteria for journeys. Provide at least an empty object `{}`.
+        -  `field` (optional): The field to sort by. Possible values are `departure`, `returnDate`, `departure_station_id`, `departure_station_name`, `return_station_id`, `return_station_name`, `coveredDistance`, `duration`. If provided, please also provide the `order` parameter.
+        -   `order` (optional): The sort order. Possible values are `-1` and `1`. If provided, please also provide the `field` parameter.
+    -   `page` (optional): The page number for pagination. Default is 1. If provided, please also provide the `limit` parameter.
+    -   `limit` (optional): The maximum number of journeys to retrieve per page. Default is 30. If provided, please also provide the `page` parameter.
     -   `filter` (optional): An object specifying filter conditions for journeys.
-    -   `sort` (optional): An object specifying sorting criteria for journeys.
-        -   `departure` (optional): Sorts journeys by departure date.
-        -   `returnDate` (optional): Sorts journeys by return date.
 
 Response:
 
@@ -252,7 +259,7 @@ Response:
 
 Creates a new journey.
 
-URL: `/journey`
+URL: `/map/journey`
 
 Method: `POST`
 
@@ -310,6 +317,78 @@ Response:
 
 -   Success: 200 OK (User verified)
 -   Error: 401 Unauthorized or 500 Internal Server Error
+
+&nbsp;
+
+# 🔍 Testing
+❕ Testing logic, documentation and tests themselves were completed after the project deadline. ❕
+
+## Launching testing
+
+1. If on the install of all dependencies for the project you have not installed the testing dependencies, run `npm i` in the testing folder.
+2. You can start testing in 5 different ways (you have to be in the testing folder):
+    - In case you want to only the tests (environment is ready - Node.js backend and React frontend are running):
+        - `npm run start-all-manual` - will test both live and local frontend and backend
+        - `npm run start-local-manual` - will test only local frontend and backend
+    - In case you want to start the tests and the environment (Node.js backend and React frontend):
+        - `npm run start-all-auto` - will launch local backend and frontend, and will test both live and local frontend and backend
+        - `npm run start-local-auto` - will launch local backend and frontend, and will test only local frontend and backend
+    - For testing only live frontend and backend, you don't need to start the environment, just run:
+        - `npm run start-live`
+
+3. After the tests are finished, you will see the results in the console.
+
+## Testing with Puppeteer
+
+The `webTester` function uses Puppeteer browser instance to simulate user interactions and validate the behavior of the web application. It performs actions such as clicking on elements, waiting for selectors, and navigating through different pages. The function returns `true` if all the tests pass, and `false` otherwise.
+
+```javascript
+const browser = await puppeteer.launch();
+const url = "http://example.com";
+await webTester(url, expectedTime);
+```
+
+Output will be:
+```diff
+In case of success:
++ Live/Local frontend passed checks and is functional
+
+In case of failure:
+- Live/Local frontend failed tests and is currently broken
+
+Will also contain performance metrics for each run:
+@@ Activation total time: MM m : SS.MS s for Live/Local frontend@@
+@@ Percentage difference: ±% from expected time of SS seconds@@
+```
+
+## Testing with Axios
+
+The `apiTester` function uses Axios to send HTTP requests to the backend and validate the behavior of the API. It performs actions such as sending requests, waiting for responses, and validating the response data. Output of `apiTester` is an Object containing the results of the tests - response status, response time and result of the test - `true` if the test passed, and `false` otherwise. The `apiTester` function tests all the endpoints of the API.
+
+```javascript
+const url = "http://example.com";
+const response = await apiTester(url, expectedTime);
+```
+
+Output will be:
+```diff
+@@ url = "http://example.com" @@
+In case of success:
++ testName : { status: 200/201, time: n, result: true }
+
+In case of failure:
+- testName : { status: 400/401/404/500/409/503, error: "error message", result: false }
+
+Will also contain performance metrics for each run:
+@@ Activation total time: MM m : SS.MS s for Live/Local frontend@@
+@@ Percentage difference: ±% from expected time of SS seconds@@
+``` 
+
+### Performance Metrics
+
+| Frontend Tests | Live Backend Tests | Local Backend Tests |
+| :---: | :---: | :---: |
+| ![Frontend Tests](images/frontends.png) | ![Live Backend Tests](images/heroku.png) | ![Local Backend Tests](images/local.png) |
 
 &nbsp;
 
@@ -407,6 +486,14 @@ In terms of deployment, I hosted the frontend and backend on Heroku servers. It 
 Overall, this project allowed me to enhance my skills in full-stack development and gain experience in working with various technologies and libraries. I am satisfied with the final result and believe that I have successfully met the requirements of the Solita Dev Academy pre-assignment.
 
 &nbsp;
+
+# Contacts
+
+- **Nickname: OxCone**
+- [**Email**](mailto:v.lapins.cd@gmail.com)
+- [**LinkedIn**](https://www.linkedin.com/in/vadims-lapins-75a6a3209/)
+- **Discord: OxCone#1897**
+
 
 
 # License
