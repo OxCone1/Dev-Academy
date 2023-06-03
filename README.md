@@ -7,7 +7,7 @@ This is the pre-assignment for Solita Dev Academy Finland 2023. The app displays
 ## [💾 LIVE BACKEND DEMO](https://academy-server-2023.herokuapp.com/)
 ❕ Plesae note that the apps are hosted on Heroku servers, so it might take some time wake them up. ❕
 
-❕ Testing logic, documentation and tests themselves were completed after the project deadline. If they will not count towards application, please still [check them out](#-🔍-Testing). ❕
+❕ Testing logic, documentation and tests themselves were completed after the project deadline. If they will not count towards application, please still [check them out](#-testing). ❕
 
 &nbsp;
 # Tech Stack
