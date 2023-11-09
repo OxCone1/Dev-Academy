@@ -485,6 +485,8 @@ In terms of deployment, I hosted the frontend and backend on Heroku servers. It 
 
 Overall, this project allowed me to enhance my skills in full-stack development and gain experience in working with various technologies and libraries. I am satisfied with the final result and believe that I have successfully met the requirements of the Solita Dev Academy pre-assignment.
 
+### As of 10.11.2023 database hosting was moved to MongoDB Atlas
+
 &nbsp;
 
 # Contacts
